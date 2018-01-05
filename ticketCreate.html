@@ -1,0 +1,253 @@
+<div class="col-sm-12">
+    <div class="card-box">
+        <div class="dropdown pull-right">
+            <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+        <h4 class="header-title m-t-0 m-b-30">New Ticket</h4>
+        <div class="row">
+            <div class="col-lg-8">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Title</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" placeholder="Title Here" id="ticketTitle">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-12">Description</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <textarea id="ticketDescription" name="area"></textarea>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Text</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" value="Some text value...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="example-email">Email</label>
+                        <div class="col-md-10">
+                            <input type="email" id="example-email" name="example-email" class="form-control" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Password</label>
+                        <div class="col-md-10">
+                            <input type="password" class="form-control" value="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Placeholder</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" placeholder="placeholder">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Text area</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" rows="5"></textarea>
+                        </div>
+                    </div>
+                -->
+                </form>
+            </div>
+            <div class="col-lg-4">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Client</label>
+                        <div class="col-md-10">
+                            <select class="form-control" id="ticketClient">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Severity</label>
+                        <div class="col-md-10">
+                            <select class="form-control" id="ticketSeverity">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Tracker</label>
+                        <div class="col-md-10">
+                            <select class="form-control" id="ticketTracker">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Sub-Tracker</label>
+                        <div class="col-md-10">
+                            <select multiple="" class="form-control" id="ticketSubTracker">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Asigned To</label>
+                        <div class="col-md-10">
+                            <select multiple="" class="form-control" id="ticketAsignedTo">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Tags</label>
+                        <div class="col-md-10">
+                            <div class="tags-default" title="Note" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Must be ticket number only.">
+                                <input type="text" value="" placeholder="add tags" id="ticketTags" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Due Date</label>
+                        <div class="col-md-10" id="ticketDue">
+                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- end col -->
+        </div>
+        <div class="form-group text-right m-b-0">
+            <button class="btn btn-primary waves-effect waves-light" type="submit" id="ticketSubmit">
+                Submit
+            </button>
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+<script>
+if (localStorage.getItem('__IdticketCreate')) {
+
+} else {
+    initTicketCreate();
+}
+
+function testpicker(){
+
+}
+function initTicketCreate() {
+    $('#ticketDue').datepicker();
+    $.each(fε.getValue(fε.getValue("client") + "/ticketClient"), function(key, value) {
+        $("#ticketClient").appendOption(key, value);
+    });
+    $.each(fε.getValue(fε.getValue("client") + "/ticketStatus"), function(key, value) {
+        $("#ticketSeverity").appendOption(key, value.name, value.description);
+    });
+    $.each(fε.getValue(fε.getValue("client") + "/ticketMainTracker"), function(key, value) {
+        $("#ticketTracker").appendOption(key, value.name, value.description);
+    });
+    $.each(fε.getValue(fε.getValue("client") + "/low_users"), function(key, value) {
+        $("#ticketAsignedTo").appendOption(key, value);
+    });
+    $("#ticketTracker").change(function() {
+        var x = fε.getValue(fε.getValue("client") + "/ticketSubTracker");
+        if (x[$(this).val()]) {
+            $.each(x[$(this).val()], function(key, value) {
+                $("#ticketSubTracker").appendOption(key, value.name, value.description);
+            });
+        }
+    });
+    if ($("#ticketDescription").length > 0) {
+        tinymce.remove("textarea#ticketDescription");
+        tinymce.init({
+            selector: "textarea#ticketDescription",
+            theme: "modern",
+            height: 300,
+            plugins: [
+                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                "save table contextmenu directionality emoticons template paste textcolor"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+            style_formats: [
+                { title: 'Bold text', inline: 'b' },
+                { title: 'Red text', inline: 'span', styles: { color: '#ff0000' } },
+                { title: 'Red header', block: 'h1', styles: { color: '#ff0000' } },
+                { title: 'Example 1', inline: 'span', classes: 'example1' },
+                { title: 'Example 2', inline: 'span', classes: 'example2' },
+                { title: 'Table styles' },
+                { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }
+            ]
+        });
+    }
+    $("#ticketTags").tagsinput();
+    $("#ticketTags").on("beforeItemAdd", function(event) {
+        if (event.item.indexOf("#") == -1) {
+            var y = parseInt(event.item);
+            if (!isNaN(y)) {
+                $("#ticketTags").tagsinput("add", "#" + y);
+                event.cancel = true;
+            } else {
+                event.cancel = true;
+            }
+
+
+        }
+    });
+    $("[data-toggle='popover']").popover();
+
+    var t = 0;
+    $("#ticketSubmit").click(function() {
+        /*
+        showToaster(0,function(){
+            toastr["success"](t+'<br /><br /><button type="button" class="btn btn-default clear">Yes</button>', "TestData");
+        });
+        t++;
+        */
+        insertData();
+    });
+
+    function insertData() {
+        tinyMCE.triggerSave();
+        var objDictinary = {
+            "ticketClient": "a",
+            "ticketSeverity": "b",
+            "ticketSubTracker": "c",
+            "ticketAsignedTo": "d",
+            "ticketTags": "e",
+            "ticketTitle": "f",
+            "ticketDescription": "g",
+            "ticketStarted": "h",
+            "ticketFinished": "i",
+            "ticketTimeSpent": "j"
+        }
+        var ins = {};
+        for (var obj in objDictinary) {
+            if ($("#" + obj).val()) {
+                ins[objDictinary[obj]] = $("#" + obj).val();
+            } else {
+                ins[objDictinary[obj]] = "---";
+            }
+
+        }
+        ins.k = ($('#ticketDue').data('datepicker').viewDate) ? ($('#ticketDue').data('datepicker').viewDate).getTime() : "---";
+        ins.l = "Created";
+        ins.z = (new Date()).getTime();
+        var timeStampData = (new Date()).getTime();
+        var nodePath = Base64.encode((randomString(12) + 'timeStampData' + timeStampData));
+        MainApp.database().ref(fε.getValue("client") + "/ticketList/" + nodePath).set(ins).then(function() {
+
+        });
+
+
+        /*s$.counterPlus(function(){
+            console.log("test Callback");
+        });*/
+    }
+
+
+}
+</script>
+<!-- end col -->

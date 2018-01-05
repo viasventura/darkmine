@@ -1,0 +1,35 @@
+<div class="user-img">
+    <img src="assets/images/users/default_profile.png" alt="user-img" title="Mat Helme" class="img-circle img-thumbnail img-responsive">
+    <div class="user-status offline"><i class="zmdi zmdi-dot-circle"></i></div>
+</div>
+<h5 id="currentUserName"><a href="#"></a></h5>
+<ul class="list-inline">
+    <li>
+        <a href="#">
+                                    <i class="zmdi zmdi-settings"></i>
+                                </a>
+    </li>
+    <li>
+        <a href="#" class="text-custom">
+                                    <i class="zmdi zmdi-power" id="signOut"></i>
+                                </a>
+    </li>
+</ul>
+<script>
+initSidebarProfile();
+function initSidebarProfile() {
+    var u = fε.getValue("user");
+    $("#signOut").click(function() {
+        MainApp.auth().signOut().then(function() {
+            //window.location = "page-login.html";
+        });
+    });
+    MainApp.database().ref(fε.getValue("client") + "/low_users/" + u).once("value",function(snapName){
+        $("#currentUserName a").html(snapName.val());
+    });
+    MainApp.database().ref(fε.getValue("client") + "/users/"+u+"/imgUrl").once("value",function(snapImgUrl){
+        loadImage(u,snapImgUrl.val());
+        $(".user-img img").attr("preload",u);
+    });
+}
+</script>

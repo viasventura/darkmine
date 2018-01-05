@@ -1,0 +1,184 @@
+<div class="col-lg-4">
+    <div class="card-box">
+        <div class="dropdown pull-right">
+            <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+        <h4 class="header-title m-t-0 m-b-30">Task News</h4>
+        <div class="inbox-widget nicescroll">
+            <a href="#">
+                <div class="inbox-item">
+                    <div class="inbox-item-img"><img src="assets/images/users/avatar-1.png" class="img-circle" alt=""></div>
+                    <p class="inbox-item-author">Rodolfo Jose Bagay</p>
+                    <p class="inbox-item-text">Forwarded issue no.4421 to Kathrine Gemina, status of Qaulity Assurance.</p>
+                    <p class="inbox-item-date">13:40 PM</p>
+                </div>
+            </a>
+            <a href="#">
+                <div class="inbox-item">
+                    <div class="inbox-item-img"><img src="assets/images/users/avatar-2.jpg" class="img-circle" alt=""></div>
+                    <p class="inbox-item-author">Bart Consuelo</p>
+                    <p class="inbox-item-text">Change the estimated time of issue no.4223 to '3Days and 2Hours' for Development</p>
+                    <p class="inbox-item-date">13:34 PM</p>
+                </div>
+            </a>
+            <a href="#">
+                <div class="inbox-item">
+                    <div class="inbox-item-img"><img src="assets/images/users/avatar-3.jpg" class="img-circle" alt=""></div>
+                    <p class="inbox-item-author">Kathrine Geminad</p>
+                    <p class="inbox-item-text">Resolved issue no.1234.</p>
+                    <p class="inbox-item-date">13:17 PM</p>
+                </div>
+            </a>
+            <a href="#">
+                <div class="inbox-item">
+                    <div class="inbox-item-img"><img src="assets/images/users/avatar-4.jpg" class="img-circle" alt=""></div>
+                    <p class="inbox-item-author">Richard Bautista</p>
+                    <p class="inbox-item-text">Assigned issue no.2831 to Axylle Finans with estimated time of 4Hours for Development.</p>
+                    <p class="inbox-item-date">12:20 PM</p>
+                </div>
+            </a>
+            <a href="#">
+                <div class="inbox-item">
+                    <div class="inbox-item-img"><img src="assets/images/users/avatar-5.jpg" class="img-circle" alt=""></div>
+                    <p class="inbox-item-author">Axylle Finans</p>
+                    <p class="inbox-item-text">Change the Severity 1 to Severity 2 of issue no.2231.</p>
+                    <p class="inbox-item-date">10:15 AM</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- end col -->
+<div class="col-lg-8">
+    <div class="card-box">
+        <div class="dropdown pull-right">
+            <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+        <h4 class="header-title m-t-0 m-b-30">Ticket Assigned</h4>
+        <div class="table-responsive">
+            <table class="table" id="ticketSummaryList">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ticket Name</th>
+                        <th>Create Date</th>
+                        <th>Due Date</th>
+                        <th>Severity</th>
+                        <th>Status</th>
+                        <th>Assign</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+initTicketSummary();
+var ticketSummary = {}
+
+function initTicketSummary() {
+    MainApp.database().ref(fε.getValue("client") + "/ticketAssignedTo/" + fε.getValue("user")).once("value", function(ticketShallow) {
+        var ts = ticketShallow.val();
+        var convertDate = function(TimeS) {
+            if (TimeS === "---" ){
+                return "No Due Date";
+            }
+            if (!TimeS ){
+                return "No Due Date";
+            }
+            return (new Date(TimeS)).toLocaleTimeString("en-us", {
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+        var getSeverity = function(sevkey){
+            var sevStat = fε.getValue(fε.getValue("client") + "/ticketStatus");
+            if(sevStat[sevkey]){
+                return '<span class="'+sevStat[sevkey].class+'">'+sevStat[sevkey].name+'</span>';
+            }else{
+                return '<td><span class="label label-warning">No Severity</span></td>';
+            }
+        }
+        var getAssigned = function(arrId){
+            var lowU = fε.getValue(fε.getValue("client") + "/low_users");
+            var ot = "";
+            for(var x in arrId){
+                if(lowU[arrId[x]]){
+                    ot +='<img src="assets/images/users/default_profile.png" alt="img" class="thumb-sm img-circle thumb-br-r" preload="'+arrId[x]+'">';
+                }else{
+                    console.warning(arrId[x] + "low_users has no data");
+                }
+            }
+            return ot;
+        }
+
+        for (var index in ts) {
+            ticketSummary[index] = {
+                indexVal: index,
+                indexPath: ts[index],
+                value: {},
+                get val() {
+                    return this.value;
+                },
+                set val(x) {
+                    this.value = x;
+                    var _obj = $("#ticketSummaryList tbody #" + this.indexVal + " td");
+                    $(_obj[1]).html(this.value.f);
+                    $(_obj[2]).html(convertDate(this.value.z));
+                    $(_obj[3]).html(convertDate(this.value.k));
+                    $(_obj[4]).html(getSeverity(this.value.b));
+                    $(_obj[5]).html(this.value.l ? this.value.l : "No Status");
+                    $(_obj[6]).html(getAssigned(this.value.d));
+                    forceLoadImage(this.value.d);
+                },
+                selfset: function() {
+                    var t = this.indexVal;
+                    MainApp.database().ref(fε.getValue("client") + "/ticketList/" + this.indexPath).once("value", function(snapSelf) {
+                        ticketSummary[t].val = snapSelf.val();
+                    });
+                }
+
+            }
+            ticketSummary[index].selfset();
+            $("#ticketSummaryList tbody").append(
+                '<tr id="' + index + '">' +
+                '<td>' + index + '</td>' +
+                '<td><i class="fa fa-circle-o-notch fa-spin"></i></td>' +
+                '<td></td>' +
+                '<td></td>' +
+                '<td></td>' +
+                '<td></td>' +
+                '<td></td>' +
+                '</tr>');
+            $("")
+        }
+    });
+
+}
+</script>
+<!-- end col -->
